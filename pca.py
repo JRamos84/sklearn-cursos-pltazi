@@ -26,4 +26,31 @@ if __name__ == '__main__':
     print(X_train.shape)
     print(y_train.shape)
     
+    "n_components = min(n_muestras,n_features)"
+    pca = PCA(n_components=3)
+    pca.fit(X_train)
+    
+    ipca = IncrementalPCA(n_components=3, batch_size=10)
+    ipca.fit(X_train)
+    
+    plt.plot(range(len(pca.explained_variance_)),pca.explained_variance_ratio_, 'o')
+    plt.show()
+    
+    logistic = LogisticRegression(solver='lbfgs')
+    
+    dt_train = pca.transform(X_train)
+    dt_test = pca.transform(X_test)
+    
+    logistic.fit(dt_train,y_train)
+    print("SCORE PCA: ", logistic.score(dt_test, y_test))
+    
+    dt_train = ipca.transform(X_train)
+    dt_test = ipca.transform(X_test)
+    
+    logistic.fit(dt_train,y_train)
+    print("SCORE IPCA: ", logistic.score(dt_test, y_test))
+    
+    
+    
+    
     
